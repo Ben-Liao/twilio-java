@@ -28,26 +28,30 @@ public class FactorCreator extends Creator<Factor> {
     private final String binding;
     private final String friendlyName;
     private final Factor.FactorTypes factorType;
+    private final String config;
 
     /**
      * Construct a new FactorCreator.
      *
      * @param pathServiceSid Service Sid.
      * @param pathIdentity Unique identity of the Entity
-     * @param binding A unique binding for this Factor
+     * @param binding A unique binding for this Factor as a json string
      * @param friendlyName The friendly name of this Factor
      * @param factorType The Type of this Factor
+     * @param config The config for this Factor as a json string
      */
     public FactorCreator(final String pathServiceSid,
                          final String pathIdentity,
                          final String binding,
                          final String friendlyName,
-                         final Factor.FactorTypes factorType) {
+                         final Factor.FactorTypes factorType,
+                         final String config) {
         this.pathServiceSid = pathServiceSid;
         this.pathIdentity = pathIdentity;
         this.binding = binding;
         this.friendlyName = friendlyName;
         this.factorType = factorType;
+        this.config = config;
     }
 
     /**
@@ -105,6 +109,10 @@ public class FactorCreator extends Creator<Factor> {
 
         if (factorType != null) {
             request.addPostParam("FactorType", factorType.toString());
+        }
+
+        if (config != null) {
+            request.addPostParam("Config", config);
         }
     }
 }

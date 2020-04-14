@@ -30,7 +30,8 @@ public class AvailableAddOnExtensionReader extends Reader<AvailableAddOnExtensio
     /**
      * Construct a new AvailableAddOnExtensionReader.
      *
-     * @param pathAvailableAddOnSid The available_add_on_sid
+     * @param pathAvailableAddOnSid The SID of the AvailableAddOn resource with the
+     *                              extensions to read
      */
     public AvailableAddOnExtensionReader(final String pathAvailableAddOnSid) {
         this.pathAvailableAddOnSid = pathAvailableAddOnSid;

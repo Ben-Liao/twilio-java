@@ -10,38 +10,44 @@ The documentation for the Twilio API can be found [here][apidocs].
 
 The Java library documentation can be found [here][libdocs].
 
-## Recent Update
+## Versions
 
-As of release 7.14.0, Beta and Developer Preview products are now exposed via
-the main `twilio-java` artifact. Releases of the `alpha` branch have been
-discontinued.
+`twilio-java` uses a modified version of [Semantic Versioning](https://semver.org) for all changes. [See this document](VERSIONS.md) for details.
 
-If you were using the `alpha` release line, you should be able to switch back
-to the normal release line without issue.
+### TLS 1.2 Requirements
 
-If you were using the normal release line, you should now see several new
-product lines that were historically hidden from you due to their Beta or
-Developer Preview status. Such products are explicitly documented as
-Beta/Developer Preview both in the Twilio docs and console, as well as through
-in-line code documentation here in the library.
+New accounts and subaccounts are now required to use TLS 1.2 when accessing the REST API. ["Upgrade Required" errors](https://www.twilio.com/docs/api/errors/20426) indicate that TLS 1.0/1.1 is being used.
 
-## Installing
+### Supported Java Versions
 
-twilio-java uses Maven.  At present the jars *are* available from a public [maven](https://mvnrepository.com/artifact/com.twilio.sdk/twilio) repository.
+This library supports the following Java implementations:
+
+* OpenJDK 7
+* OpenJDK 8
+* OpenJDK 11
+* OracleJDK 7
+* OracleJDK 8
+* OracleJDK 11
+
+## Installation
+
+twilio-java uses Maven. At present the jars *are* available from a public [maven](https://mvnrepository.com/artifact/com.twilio.sdk/twilio) repository.
 
 Use the following dependency in your project to grab via Maven:
 
+```
        <dependency>
           <groupId>com.twilio.sdk</groupId>
           <artifactId>twilio</artifactId>
           <version>7.X.X</version>
           <scope>compile</scope>
        </dependency>
+```
 
 or Gradle:
 ```groovy
 implementation "com.twilio.sdk:twilio:7.X.X"
-````
+```
 
 If you want to compile it yourself, here's how:
 
@@ -49,20 +55,30 @@ If you want to compile it yourself, here's how:
     $ cd twilio-java
     $ mvn install       # Requires maven, download from https://maven.apache.org/download.html
 
-## Versions
+If you want to build your own .jar, execute the following from within the cloned directory:
 
-`twilio-java` uses a modified version of [Semantic Versioning](https://semver.org) for all changes. [See this document](VERSIONS.md) for details.
+    $ mvn package
+
+If you run into trouble with local tests, use:
+
+    $ mvn package -Dmaven.test.skip=true
 
 ## Quickstart
 
-### Send a SMS
+### Initialize the Client
 
 ```java
-String accountSid = "ACXXXXXX"; // Your Account SID from www.twilio.com/user/account
-String authToken = "XXXXXXXX"; // Your Auth Token from www.twilio.com/user/account
+// Find your Account SID and Auth Token at twilio.com/console
+// DANGER! This is insecure. See http://twil.io/secure
+String accountSid = "ACXXXXXX";
+String authToken = "XXXXXXXX";
 
 Twilio.init(accountSid, authToken);
+```
 
+### Send an SMS
+
+```java
 Message message = Message.creator(
     new PhoneNumber("+15558881234"),  // To number
     new PhoneNumber("+15559994321"),  // From number
@@ -72,14 +88,9 @@ Message message = Message.creator(
 System.out.println(message.getSid());
 ```
 
-### Make a call
+### Make a Call
 
 ```java
-String accountSid = "ACXXXXXX"; // Your Account SID from www.twilio.com/user/account
-String authToken = "XXXXXXXX"; // Your Auth Token from www.twilio.com/user/account
-
-Twilio.init(accountSid, authToken);
-
 Call call = Call.creator(
     new PhoneNumber("+15558881234"),  // To number
     new PhoneNumber("+15559994321"),  // From number
@@ -89,6 +100,38 @@ Call call = Call.creator(
 ).create();
 
 System.out.println(call.getSid());
+```
+
+### Handling Exceptions
+
+```java
+import com.twilio.exception.ApiException;
+
+try {
+    Message message = Message.creator(
+        new PhoneNumber("+15558881234"),  // To number
+        new PhoneNumber("+15559994321"),  // From number
+        "Hello world!"                    // SMS body
+    ).create();
+    
+    System.out.println(message.getSid());
+} catch (final ApiException e) {
+    System.err.println(e);
+}
+```
+
+### Using a Different Client
+
+```java
+TwilioRestClient client = new TwilioRestClient.Builder(accountSid, authToken).build();
+
+Message message = Message.creator(
+    new PhoneNumber("+15558881234"),  // To number
+    new PhoneNumber("+15559994321"),  // From number
+    "Hello world!"                    // SMS body
+).create(client);  // Pass the client here
+
+System.out.println(message.getSid());
 ```
 
 ### Generating TwiML
@@ -116,7 +159,7 @@ That will output XML that looks like this:
 
 The `Dockerfile` present in this repository and its respective `twilio/twilio-java` Docker image are currently used by Twilio for testing purposes only.
 
-## Getting help
+## Getting Help
 
 If you need help installing or using the library, please check the [Twilio Support Help Center](https://support.twilio.com) first, and [file a support ticket](https://twilio.com/help/contact) if you don't find an answer to your question.
 

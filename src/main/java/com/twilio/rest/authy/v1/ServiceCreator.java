@@ -24,6 +24,7 @@ import com.twilio.rest.Domains;
  */
 public class ServiceCreator extends Creator<Service> {
     private final String friendlyName;
+    private String push;
 
     /**
      * Construct a new ServiceCreator.
@@ -32,6 +33,19 @@ public class ServiceCreator extends Creator<Service> {
      */
     public ServiceCreator(final String friendlyName) {
         this.friendlyName = friendlyName;
+    }
+
+    /**
+     * The optional service level push factors configuration. If present it must be
+     * a json string with the following format: {"notify_service_sid":
+     * "ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "include_date": true}.
+     *
+     * @param push Optional service level push factors configuration
+     * @return this
+     */
+    public ServiceCreator setPush(final String push) {
+        this.push = push;
+        return this;
     }
 
     /**
@@ -81,6 +95,10 @@ public class ServiceCreator extends Creator<Service> {
     private void addPostParams(final Request request) {
         if (friendlyName != null) {
             request.addPostParam("FriendlyName", friendlyName);
+        }
+
+        if (push != null) {
+            request.addPostParam("Push", push);
         }
     }
 }

@@ -28,7 +28,7 @@ public class AvailableAddOnFetcher extends Fetcher<AvailableAddOn> {
     /**
      * Construct a new AvailableAddOnFetcher.
      *
-     * @param pathSid The unique Available Add-on Sid
+     * @param pathSid The SID of the AvailableAddOn resource to fetch
      */
     public AvailableAddOnFetcher(final String pathSid) {
         this.pathSid = pathSid;

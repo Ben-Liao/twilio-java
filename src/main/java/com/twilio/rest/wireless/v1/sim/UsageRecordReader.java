@@ -38,7 +38,8 @@ public class UsageRecordReader extends Reader<UsageRecord> {
 
     /**
      * Only include usage that occurred on or before this date, specified in [ISO
-     * 8601](https://www.iso.org/iso-8601-date-and-time-format.html)..
+     * 8601](https://www.iso.org/iso-8601-date-and-time-format.html). The default is
+     * the current time..
      *
      * @param end Only include usage that occurred on or before this date
      * @return this
@@ -50,7 +51,8 @@ public class UsageRecordReader extends Reader<UsageRecord> {
 
     /**
      * Only include usage that has occurred on or after this date, specified in [ISO
-     * 8601](https://www.iso.org/iso-8601-date-and-time-format.html)..
+     * 8601](https://www.iso.org/iso-8601-date-and-time-format.html). The default is
+     * one month before the `end` parameter value..
      *
      * @param start Only include usage that has occurred on or after this date
      * @return this
@@ -61,9 +63,9 @@ public class UsageRecordReader extends Reader<UsageRecord> {
     }
 
     /**
-     * How to summarize the usage by time. Can be: `daily`, `hourly`, or `all`. A
-     * value of `all` returns one Usage Record that describes the usage for the
-     * entire period..
+     * How to summarize the usage by time. Can be: `daily`, `hourly`, or `all`. The
+     * default is `all`. A value of `all` returns one Usage Record that describes
+     * the usage for the entire period..
      *
      * @param granularity The time-based grouping that results are aggregated by
      * @return this

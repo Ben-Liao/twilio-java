@@ -25,9 +25,11 @@ public class ReservationFetcher extends Fetcher<Reservation> {
     /**
      * Construct a new ReservationFetcher.
      *
-     * @param pathWorkspaceSid The workspace_sid
-     * @param pathTaskSid The task_sid
-     * @param pathSid The sid
+     * @param pathWorkspaceSid The SID of the Workspace with the TaskReservation
+     *                         resource to fetch
+     * @param pathTaskSid The SID of the reserved Task resource with the
+     *                    TaskReservation resource to fetch
+     * @param pathSid The SID of the TaskReservation resource to fetch
      */
     public ReservationFetcher(final String pathWorkspaceSid,
                               final String pathTaskSid,

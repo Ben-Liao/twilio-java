@@ -40,7 +40,7 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FunctionVersion extends Resource {
-    private static final long serialVersionUID = 219697752660692L;
+    private static final long serialVersionUID = 198867416400366L;
 
     public enum Visibility {
         PUBLIC("public"),
@@ -71,10 +71,10 @@ public class FunctionVersion extends Resource {
     /**
      * Create a FunctionVersionReader to execute read.
      *
-     * @param pathServiceSid The SID of the Service to read the FunctionVersion
+     * @param pathServiceSid The SID of the Service to read the Function Version
      *                       resources from
      * @param pathFunctionSid The SID of the function that is the parent of the
-     *                        FunctionVersion resources to read
+     *                        Function Version resources to read
      * @return FunctionVersionReader capable of executing the read
      */
     public static FunctionVersionReader reader(final String pathServiceSid,
@@ -85,11 +85,11 @@ public class FunctionVersion extends Resource {
     /**
      * Create a FunctionVersionFetcher to execute fetch.
      *
-     * @param pathServiceSid The SID of the Service to fetch the FunctionVersion
+     * @param pathServiceSid The SID of the Service to fetch the Function Version
      *                       resource from
      * @param pathFunctionSid The SID of the function that is the parent of the
-     *                        FunctionVersion resource to fetch
-     * @param pathSid The SID that identifies the FunctionVersion resource to fetch
+     *                        Function Version resource to fetch
+     * @param pathSid The SID that identifies the Function Version resource to fetch
      * @return FunctionVersionFetcher capable of executing the fetch
      */
     public static FunctionVersionFetcher fetcher(final String pathServiceSid,
@@ -144,6 +144,7 @@ public class FunctionVersion extends Resource {
     private final FunctionVersion.Visibility visibility;
     private final DateTime dateCreated;
     private final URI url;
+    private final Map<String, String> links;
 
     @JsonCreator
     private FunctionVersion(@JsonProperty("sid")
@@ -161,7 +162,9 @@ public class FunctionVersion extends Resource {
                             @JsonProperty("date_created")
                             final String dateCreated,
                             @JsonProperty("url")
-                            final URI url) {
+                            final URI url,
+                            @JsonProperty("links")
+                            final Map<String, String> links) {
         this.sid = sid;
         this.accountSid = accountSid;
         this.serviceSid = serviceSid;
@@ -170,31 +173,32 @@ public class FunctionVersion extends Resource {
         this.visibility = visibility;
         this.dateCreated = DateConverter.iso8601DateTimeFromString(dateCreated);
         this.url = url;
+        this.links = links;
     }
 
     /**
-     * Returns The The unique string that identifies the FunctionVersion resource.
+     * Returns The unique string that identifies the Function Version resource.
      *
-     * @return The unique string that identifies the FunctionVersion resource
+     * @return The unique string that identifies the Function Version resource
      */
     public final String getSid() {
         return this.sid;
     }
 
     /**
-     * Returns The The SID of the Account that created the FunctionVersion resource.
+     * Returns The SID of the Account that created the Function Version resource.
      *
-     * @return The SID of the Account that created the FunctionVersion resource
+     * @return The SID of the Account that created the Function Version resource
      */
     public final String getAccountSid() {
         return this.accountSid;
     }
 
     /**
-     * Returns The The SID of the Service that the FunctionVersion resource is
+     * Returns The SID of the Service that the Function Version resource is
      * associated with.
      *
-     * @return The SID of the Service that the FunctionVersion resource is
+     * @return The SID of the Service that the Function Version resource is
      *         associated with
      */
     public final String getServiceSid() {
@@ -202,8 +206,7 @@ public class FunctionVersion extends Resource {
     }
 
     /**
-     * Returns The The SID of the function that is the parent of the function
-     * version.
+     * Returns The SID of the function that is the parent of the function version.
      *
      * @return The SID of the function that is the parent of the function version
      */
@@ -212,7 +215,7 @@ public class FunctionVersion extends Resource {
     }
 
     /**
-     * Returns The The URL-friendly string by which the function version can be
+     * Returns The URL-friendly string by which the function version can be
      * referenced.
      *
      * @return The URL-friendly string by which the function version can be
@@ -223,8 +226,8 @@ public class FunctionVersion extends Resource {
     }
 
     /**
-     * Returns The The access control that determines how the function version can
-     * be accessed.
+     * Returns The access control that determines how the function version can be
+     * accessed.
      *
      * @return The access control that determines how the function version can be
      *         accessed
@@ -234,10 +237,10 @@ public class FunctionVersion extends Resource {
     }
 
     /**
-     * Returns The The ISO 8601 date and time in GMT when the FunctionVersion
-     * resource was created.
+     * Returns The ISO 8601 date and time in GMT when the Function Version resource
+     * was created.
      *
-     * @return The ISO 8601 date and time in GMT when the FunctionVersion resource
+     * @return The ISO 8601 date and time in GMT when the Function Version resource
      *         was created
      */
     public final DateTime getDateCreated() {
@@ -245,12 +248,21 @@ public class FunctionVersion extends Resource {
     }
 
     /**
-     * Returns The The absolute URL of the FunctionVersion resource.
+     * Returns The absolute URL of the Function Version resource.
      *
-     * @return The absolute URL of the FunctionVersion resource
+     * @return The absolute URL of the Function Version resource
      */
     public final URI getUrl() {
         return this.url;
+    }
+
+    /**
+     * Returns The links.
+     *
+     * @return The links
+     */
+    public final Map<String, String> getLinks() {
+        return this.links;
     }
 
     @Override
@@ -272,7 +284,8 @@ public class FunctionVersion extends Resource {
                Objects.equals(path, other.path) &&
                Objects.equals(visibility, other.visibility) &&
                Objects.equals(dateCreated, other.dateCreated) &&
-               Objects.equals(url, other.url);
+               Objects.equals(url, other.url) &&
+               Objects.equals(links, other.links);
     }
 
     @Override
@@ -284,7 +297,8 @@ public class FunctionVersion extends Resource {
                             path,
                             visibility,
                             dateCreated,
-                            url);
+                            url,
+                            links);
     }
 
     @Override
@@ -298,6 +312,7 @@ public class FunctionVersion extends Resource {
                           .add("visibility", visibility)
                           .add("dateCreated", dateCreated)
                           .add("url", url)
+                          .add("links", links)
                           .toString();
     }
 }

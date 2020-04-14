@@ -95,7 +95,7 @@ public class Sim extends Resource {
     /**
      * Create a SimFetcher to execute fetch.
      *
-     * @param pathSid The SID that identifies the resource to fetch
+     * @param pathSid The SID of the Sim resource to fetch
      * @return SimFetcher capable of executing the fetch
      */
     public static SimFetcher fetcher(final String pathSid) {
@@ -114,7 +114,7 @@ public class Sim extends Resource {
     /**
      * Create a SimUpdater to execute update.
      *
-     * @param pathSid The SID that identifies the resource to update
+     * @param pathSid The SID of the Sim resource to update
      * @return SimUpdater capable of executing the update
      */
     public static SimUpdater updater(final String pathSid) {
@@ -124,7 +124,7 @@ public class Sim extends Resource {
     /**
      * Create a SimDeleter to execute delete.
      *
-     * @param pathSid The SID that identifies the resource to delete
+     * @param pathSid The SID of the Sim Resource to delete
      * @return SimDeleter capable of executing the delete
      */
     public static SimDeleter deleter(final String pathSid) {
@@ -269,17 +269,16 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The unique string that identifies the resource.
+     * Returns The unique string that identifies the Sim resource.
      *
-     * @return The unique string that identifies the resource
+     * @return The unique string that identifies the Sim resource
      */
     public final String getSid() {
         return this.sid;
     }
 
     /**
-     * Returns The An application-defined string that uniquely identifies the
-     * resource.
+     * Returns An application-defined string that uniquely identifies the resource.
      *
      * @return An application-defined string that uniquely identifies the resource
      */
@@ -288,34 +287,36 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The SID of the Account that created the resource.
+     * Returns The SID of the Account to which the Sim resource belongs.
      *
-     * @return The SID of the Account that created the resource
+     * @return The SID of the Account to which the Sim resource belongs
      */
     public final String getAccountSid() {
         return this.accountSid;
     }
 
     /**
-     * Returns The The SID of the RatePlan resource configured for this SIM.
+     * Returns The SID of the RatePlan resource to which the Sim resource is
+     * assigned..
      *
-     * @return The SID of the RatePlan resource configured for this SIM
+     * @return The SID of the RatePlan resource to which the Sim resource is
+     *         assigned.
      */
     public final String getRatePlanSid() {
         return this.ratePlanSid;
     }
 
     /**
-     * Returns The The string that you assigned to describe the resource.
+     * Returns The string that you assigned to describe the Sim resource.
      *
-     * @return The string that you assigned to describe the resource
+     * @return The string that you assigned to describe the Sim resource
      */
     public final String getFriendlyName() {
         return this.friendlyName;
     }
 
     /**
-     * Returns The The ICCID associated with the SIM.
+     * Returns The ICCID associated with the SIM.
      *
      * @return The ICCID associated with the SIM
      */
@@ -324,7 +325,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The Deprecated.
+     * Returns Deprecated.
      *
      * @return Deprecated
      */
@@ -333,16 +334,16 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The status of the SIM.
+     * Returns The status of the Sim resource.
      *
-     * @return The status of the SIM
+     * @return The status of the Sim resource
      */
     public final Sim.Status getStatus() {
         return this.status;
     }
 
     /**
-     * Returns The The connectivity reset status of the SIM.
+     * Returns The connectivity reset status of the SIM.
      *
      * @return The connectivity reset status of the SIM
      */
@@ -351,8 +352,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The URL we call when the SIM originates a machine-to-machine
-     * Command.
+     * Returns The URL we call when the SIM originates a machine-to-machine Command.
      *
      * @return The URL we call when the SIM originates a machine-to-machine Command
      */
@@ -361,7 +361,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The HTTP method we use to call commands_callback_url.
+     * Returns The HTTP method we use to call commands_callback_url.
      *
      * @return The HTTP method we use to call commands_callback_url
      */
@@ -370,7 +370,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The HTTP method we use to call sms_fallback_url.
+     * Returns The HTTP method we use to call sms_fallback_url.
      *
      * @return The HTTP method we use to call sms_fallback_url
      */
@@ -379,8 +379,8 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The URL we call when an error occurs while retrieving or
-     * executing the TwiML requested from the sms_url.
+     * Returns The URL we call when an error occurs while retrieving or executing
+     * the TwiML requested from the sms_url.
      *
      * @return The URL we call when an error occurs while retrieving or executing
      *         the TwiML requested from the sms_url
@@ -390,7 +390,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The HTTP method we use to call sms_url.
+     * Returns The HTTP method we use to call sms_url.
      *
      * @return The HTTP method we use to call sms_url
      */
@@ -399,8 +399,8 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The URL we call when the SIM-connected device sends an SMS
-     * message that is not a Command.
+     * Returns The URL we call when the SIM-connected device sends an SMS message
+     * that is not a Command.
      *
      * @return The URL we call when the SIM-connected device sends an SMS message
      *         that is not a Command
@@ -410,7 +410,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The HTTP method we use to call voice_fallback_url.
+     * Returns The HTTP method we use to call voice_fallback_url.
      *
      * @return The HTTP method we use to call voice_fallback_url
      */
@@ -419,8 +419,8 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The URL we call when an error occurs while retrieving or
-     * executing the TwiML requested from voice_url.
+     * Returns The URL we call when an error occurs while retrieving or executing
+     * the TwiML requested from voice_url.
      *
      * @return The URL we call when an error occurs while retrieving or executing
      *         the TwiML requested from voice_url
@@ -430,7 +430,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The HTTP method we use to call voice_url.
+     * Returns The HTTP method we use to call voice_url.
      *
      * @return The HTTP method we use to call voice_url
      */
@@ -439,7 +439,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The URL we call when the SIM-connected device makes a voice call.
+     * Returns The URL we call when the SIM-connected device makes a voice call.
      *
      * @return The URL we call when the SIM-connected device makes a voice call
      */
@@ -448,7 +448,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The ISO 8601 date and time in GMT when the resource was created.
+     * Returns The ISO 8601 date and time in GMT when the resource was created.
      *
      * @return The ISO 8601 date and time in GMT when the resource was created
      */
@@ -457,17 +457,18 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The ISO 8601 date and time in GMT when the resource was last
+     * Returns The ISO 8601 date and time in GMT when the Sim resource was last
      * updated.
      *
-     * @return The ISO 8601 date and time in GMT when the resource was last updated
+     * @return The ISO 8601 date and time in GMT when the Sim resource was last
+     *         updated
      */
     public final DateTime getDateUpdated() {
         return this.dateUpdated;
     }
 
     /**
-     * Returns The The absolute URL of the resource.
+     * Returns The absolute URL of the resource.
      *
      * @return The absolute URL of the resource
      */
@@ -476,7 +477,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The The URLs of related subresources.
+     * Returns The URLs of related subresources.
      *
      * @return The URLs of related subresources
      */
@@ -485,7 +486,7 @@ public class Sim extends Resource {
     }
 
     /**
-     * Returns The Deprecated.
+     * Returns Deprecated.
      *
      * @return Deprecated
      */

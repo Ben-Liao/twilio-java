@@ -41,7 +41,7 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message extends Resource {
-    private static final long serialVersionUID = 134141461829306L;
+    private static final long serialVersionUID = 205187398023238L;
 
     public enum WebhookEnabledType {
         TRUE("true"),
@@ -173,6 +173,7 @@ public class Message extends Resource {
     private final String body;
     private final List<Map<String, Object>> media;
     private final String attributes;
+    private final String participantSid;
     private final DateTime dateCreated;
     private final DateTime dateUpdated;
     private final URI url;
@@ -194,6 +195,8 @@ public class Message extends Resource {
                     final List<Map<String, Object>> media,
                     @JsonProperty("attributes")
                     final String attributes,
+                    @JsonProperty("participant_sid")
+                    final String participantSid,
                     @JsonProperty("date_created")
                     final String dateCreated,
                     @JsonProperty("date_updated")
@@ -208,13 +211,14 @@ public class Message extends Resource {
         this.body = body;
         this.media = media;
         this.attributes = attributes;
+        this.participantSid = participantSid;
         this.dateCreated = DateConverter.iso8601DateTimeFromString(dateCreated);
         this.dateUpdated = DateConverter.iso8601DateTimeFromString(dateUpdated);
         this.url = url;
     }
 
     /**
-     * Returns The The unique id of the Account responsible for this message..
+     * Returns The unique id of the Account responsible for this message..
      *
      * @return The unique id of the Account responsible for this message.
      */
@@ -223,7 +227,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The The unique id of the Conversation for this message..
+     * Returns The unique id of the Conversation for this message..
      *
      * @return The unique id of the Conversation for this message.
      */
@@ -232,7 +236,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The A 34 character string that uniquely identifies this resource..
+     * Returns A 34 character string that uniquely identifies this resource..
      *
      * @return A 34 character string that uniquely identifies this resource.
      */
@@ -241,7 +245,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The The index of the message within the Conversation..
+     * Returns The index of the message within the Conversation..
      *
      * @return The index of the message within the Conversation.
      */
@@ -250,7 +254,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The The channel specific identifier of the message's author..
+     * Returns The channel specific identifier of the message's author..
      *
      * @return The channel specific identifier of the message's author.
      */
@@ -259,7 +263,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The The content of the message..
+     * Returns The content of the message..
      *
      * @return The content of the message.
      */
@@ -268,8 +272,8 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The An array of objects that describe the Message's media if
-     * attached, otherwise, null..
+     * Returns An array of objects that describe the Message's media if attached,
+     * otherwise, null..
      *
      * @return An array of objects that describe the Message's media if attached,
      *         otherwise, null.
@@ -279,7 +283,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The A string metadata field you can use to store any data you wish..
+     * Returns A string metadata field you can use to store any data you wish..
      *
      * @return A string metadata field you can use to store any data you wish.
      */
@@ -288,7 +292,16 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The The date that this resource was created..
+     * Returns The unique id of messages's author participant..
+     *
+     * @return The unique id of messages's author participant.
+     */
+    public final String getParticipantSid() {
+        return this.participantSid;
+    }
+
+    /**
+     * Returns The date that this resource was created..
      *
      * @return The date that this resource was created.
      */
@@ -297,7 +310,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The The date that this resource was last updated..
+     * Returns The date that this resource was last updated..
      *
      * @return The date that this resource was last updated.
      */
@@ -306,7 +319,7 @@ public class Message extends Resource {
     }
 
     /**
-     * Returns The An absolute URL for this message..
+     * Returns An absolute URL for this message..
      *
      * @return An absolute URL for this message.
      */
@@ -334,6 +347,7 @@ public class Message extends Resource {
                Objects.equals(body, other.body) &&
                Objects.equals(media, other.media) &&
                Objects.equals(attributes, other.attributes) &&
+               Objects.equals(participantSid, other.participantSid) &&
                Objects.equals(dateCreated, other.dateCreated) &&
                Objects.equals(dateUpdated, other.dateUpdated) &&
                Objects.equals(url, other.url);
@@ -349,6 +363,7 @@ public class Message extends Resource {
                             body,
                             media,
                             attributes,
+                            participantSid,
                             dateCreated,
                             dateUpdated,
                             url);
@@ -365,6 +380,7 @@ public class Message extends Resource {
                           .add("body", body)
                           .add("media", media)
                           .add("attributes", attributes)
+                          .add("participantSid", participantSid)
                           .add("dateCreated", dateCreated)
                           .add("dateUpdated", dateUpdated)
                           .add("url", url)

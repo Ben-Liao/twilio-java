@@ -27,11 +27,11 @@ import com.twilio.http.Response;
 import com.twilio.http.TwilioRestClient;
 import com.twilio.rest.Domains;
 import com.twilio.type.Endpoint;
+import com.twilio.type.Twiml;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Currency;
 import java.util.Map;
@@ -39,7 +39,7 @@ import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Call extends Resource {
-    private static final long serialVersionUID = 40711775299714L;
+    private static final long serialVersionUID = 145756659403056L;
 
     public enum Event {
         INITIATED("initiated"),
@@ -160,6 +160,36 @@ public class Call extends Resource {
      * @param pathAccountSid The SID of the Account that will create the resource
      * @param to Phone number, SIP address, or client identifier to call
      * @param from Twilio number from which to originate the call
+     * @param twiml TwiML instructions for the call
+     * @return CallCreator capable of executing the create
+     */
+    public static CallCreator creator(final String pathAccountSid,
+                                      final com.twilio.type.Endpoint to,
+                                      final com.twilio.type.Endpoint from,
+                                      final com.twilio.type.Twiml twiml) {
+        return new CallCreator(pathAccountSid, to, from, twiml);
+    }
+
+    /**
+     * Create a CallCreator to execute create.
+     *
+     * @param to Phone number, SIP address, or client identifier to call
+     * @param from Twilio number from which to originate the call
+     * @param twiml TwiML instructions for the call
+     * @return CallCreator capable of executing the create
+     */
+    public static CallCreator creator(final com.twilio.type.Endpoint to,
+                                      final com.twilio.type.Endpoint from,
+                                      final com.twilio.type.Twiml twiml) {
+        return new CallCreator(to, from, twiml);
+    }
+
+    /**
+     * Create a CallCreator to execute create.
+     *
+     * @param pathAccountSid The SID of the Account that will create the resource
+     * @param to Phone number, SIP address, or client identifier to call
+     * @param from Twilio number from which to originate the call
      * @param applicationSid The SID of the Application resource that will handle
      *                       the call
      * @return CallCreator capable of executing the create
@@ -214,7 +244,7 @@ public class Call extends Resource {
      *
      * @param pathAccountSid The SID of the Account that created the resource(s) to
      *                       fetch
-     * @param pathSid The unique string that identifies this resource
+     * @param pathSid The SID of the Call resource to fetch
      * @return CallFetcher capable of executing the fetch
      */
     public static CallFetcher fetcher(final String pathAccountSid,
@@ -225,7 +255,7 @@ public class Call extends Resource {
     /**
      * Create a CallFetcher to execute fetch.
      *
-     * @param pathSid The unique string that identifies this resource
+     * @param pathSid The SID of the Call resource to fetch
      * @return CallFetcher capable of executing the fetch
      */
     public static CallFetcher fetcher(final String pathSid) {
@@ -328,7 +358,7 @@ public class Call extends Resource {
     private final String groupSid;
     private final String parentCallSid;
     private final String phoneNumberSid;
-    private final BigDecimal price;
+    private final String price;
     private final Currency priceUnit;
     private final String sid;
     private final DateTime startTime;
@@ -336,7 +366,9 @@ public class Call extends Resource {
     private final Map<String, String> subresourceUris;
     private final String to;
     private final String toFormatted;
+    private final String trunkSid;
     private final String uri;
+    private final String queueTime;
 
     @JsonCreator
     private Call(@JsonProperty("account_sid")
@@ -372,7 +404,7 @@ public class Call extends Resource {
                  @JsonProperty("phone_number_sid")
                  final String phoneNumberSid,
                  @JsonProperty("price")
-                 final BigDecimal price,
+                 final String price,
                  @JsonProperty("price_unit")
                  @JsonDeserialize(using = com.twilio.converter.CurrencyDeserializer.class)
                  final Currency priceUnit,
@@ -388,8 +420,12 @@ public class Call extends Resource {
                  final String to,
                  @JsonProperty("to_formatted")
                  final String toFormatted,
+                 @JsonProperty("trunk_sid")
+                 final String trunkSid,
                  @JsonProperty("uri")
-                 final String uri) {
+                 final String uri,
+                 @JsonProperty("queue_time")
+                 final String queueTime) {
         this.accountSid = accountSid;
         this.annotation = annotation;
         this.answeredBy = answeredBy;
@@ -414,11 +450,13 @@ public class Call extends Resource {
         this.subresourceUris = subresourceUris;
         this.to = to;
         this.toFormatted = toFormatted;
+        this.trunkSid = trunkSid;
         this.uri = uri;
+        this.queueTime = queueTime;
     }
 
     /**
-     * Returns The The SID of the Account that created this resource.
+     * Returns The SID of the Account that created this resource.
      *
      * @return The SID of the Account that created this resource
      */
@@ -427,7 +465,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The annotation provided for the call.
+     * Returns The annotation provided for the call.
      *
      * @return The annotation provided for the call
      */
@@ -436,8 +474,8 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The Either `human` or `machine` if this call was initiated with
-     * answering machine detection. Empty otherwise..
+     * Returns Either `human` or `machine` if this call was initiated with answering
+     * machine detection. Empty otherwise..
      *
      * @return Either `human` or `machine` if this call was initiated with
      *         answering machine detection. Empty otherwise.
@@ -447,7 +485,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The API Version used to create the call.
+     * Returns The API Version used to create the call.
      *
      * @return The API Version used to create the call
      */
@@ -456,8 +494,8 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The caller's name if this call was an incoming call to a phone
-     * number with caller ID Lookup enabled. Otherwise, empty..
+     * Returns The caller's name if this call was an incoming call to a phone number
+     * with caller ID Lookup enabled. Otherwise, empty..
      *
      * @return The caller's name if this call was an incoming call to a phone
      *         number with caller ID Lookup enabled. Otherwise, empty.
@@ -467,7 +505,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The RFC 2822 date and time in GMT that this resource was created.
+     * Returns The RFC 2822 date and time in GMT that this resource was created.
      *
      * @return The RFC 2822 date and time in GMT that this resource was created
      */
@@ -476,7 +514,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The RFC 2822 date and time in GMT that this resource was last
+     * Returns The RFC 2822 date and time in GMT that this resource was last
      * updated.
      *
      * @return The RFC 2822 date and time in GMT that this resource was last updated
@@ -486,9 +524,9 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The A string describing the direction of the call. `inbound` for
-     * inbound calls, `outbound-api` for calls initiated via the REST API or
-     * `outbound-dial` for calls initiated by a `Dial` verb..
+     * Returns A string describing the direction of the call. `inbound` for inbound
+     * calls, `outbound-api` for calls initiated via the REST API or `outbound-dial`
+     * for calls initiated by a `Dial` verb..
      *
      * @return A string describing the direction of the call. `inbound` for inbound
      *         calls, `outbound-api` for calls initiated via the REST API or
@@ -499,7 +537,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The length of the call in seconds..
+     * Returns The length of the call in seconds..
      *
      * @return The length of the call in seconds.
      */
@@ -508,7 +546,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The end time of the call. Null if the call did not complete
+     * Returns The end time of the call. Null if the call did not complete
      * successfully..
      *
      * @return The end time of the call. Null if the call did not complete
@@ -519,7 +557,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The forwarding phone number if this call was an incoming call
+     * Returns The forwarding phone number if this call was an incoming call
      * forwarded from another number (depends on carrier supporting forwarding).
      * Otherwise, empty..
      *
@@ -532,7 +570,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The phone number, SIP address or Client identifier that made this
+     * Returns The phone number, SIP address or Client identifier that made this
      * call. Phone numbers are in E.164 format (e.g., +16175551212). SIP addresses
      * are formatted as `name@company.com`. Client identifiers are formatted
      * `client:name`..
@@ -547,8 +585,8 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The calling phone number, SIP address, or Client identifier
-     * formatted for display..
+     * Returns The calling phone number, SIP address, or Client identifier formatted
+     * for display..
      *
      * @return The calling phone number, SIP address, or Client identifier
      *         formatted for display.
@@ -558,8 +596,8 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The Group SID associated with this call. If no Group is
-     * associated with the call, the field is empty..
+     * Returns The Group SID associated with this call. If no Group is associated
+     * with the call, the field is empty..
      *
      * @return The Group SID associated with this call. If no Group is associated
      *         with the call, the field is empty.
@@ -569,7 +607,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The SID that identifies the call that created this leg..
+     * Returns The SID that identifies the call that created this leg..
      *
      * @return The SID that identifies the call that created this leg.
      */
@@ -578,10 +616,9 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The If the call was inbound, this is the SID of the
-     * IncomingPhoneNumber resource that received the call. If the call was
-     * outbound, it is the SID of the OutgoingCallerId resource from which the call
-     * was placed..
+     * Returns If the call was inbound, this is the SID of the IncomingPhoneNumber
+     * resource that received the call. If the call was outbound, it is the SID of
+     * the OutgoingCallerId resource from which the call was placed..
      *
      * @return If the call was inbound, this is the SID of the IncomingPhoneNumber
      *         resource that received the call. If the call was outbound, it is the
@@ -592,7 +629,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The charge for this call, in the currency associated with the
+     * Returns The charge for this call, in the currency associated with the
      * account. Populated after the call is completed. May not be immediately
      * available..
      *
@@ -600,12 +637,12 @@ public class Call extends Resource {
      *         account. Populated after the call is completed. May not be
      *         immediately available.
      */
-    public final BigDecimal getPrice() {
+    public final String getPrice() {
         return this.price;
     }
 
     /**
-     * Returns The The currency in which `Price` is measured..
+     * Returns The currency in which `Price` is measured..
      *
      * @return The currency in which `Price` is measured.
      */
@@ -614,7 +651,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The unique string that identifies this resource.
+     * Returns The unique string that identifies this resource.
      *
      * @return The unique string that identifies this resource
      */
@@ -623,7 +660,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The start time of the call. Null if the call has not yet been
+     * Returns The start time of the call. Null if the call has not yet been
      * dialed..
      *
      * @return The start time of the call. Null if the call has not yet been dialed.
@@ -633,7 +670,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The status of this call..
+     * Returns The status of this call..
      *
      * @return The status of this call.
      */
@@ -642,7 +679,7 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The A list of related subresources identified by their relative URIs.
+     * Returns A list of related subresources identified by their relative URIs.
      *
      * @return A list of related subresources identified by their relative URIs
      */
@@ -651,10 +688,10 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The phone number, SIP address or Client identifier that received
-     * this call. Phone numbers are in E.164 format (e.g., +16175551212). SIP
-     * addresses are formatted as `name@company.com`. Client identifiers are
-     * formatted `client:name`..
+     * Returns The phone number, SIP address or Client identifier that received this
+     * call. Phone numbers are in E.164 format (e.g., +16175551212). SIP addresses
+     * are formatted as `name@company.com`. Client identifiers are formatted
+     * `client:name`..
      *
      * @return The phone number, SIP address or Client identifier that received
      *         this call. Phone numbers are in E.164 format (e.g., +16175551212).
@@ -666,8 +703,8 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The phone number, SIP address or Client identifier that received
-     * this call. Formatted for display..
+     * Returns The phone number, SIP address or Client identifier that received this
+     * call. Formatted for display..
      *
      * @return The phone number, SIP address or Client identifier that received
      *         this call. Formatted for display.
@@ -677,12 +714,32 @@ public class Call extends Resource {
     }
 
     /**
-     * Returns The The URI of this resource, relative to `https://api.twilio.com`.
+     * Returns The (optional) unique identifier of the trunk resource that was used
+     * for this call..
+     *
+     * @return The (optional) unique identifier of the trunk resource that was used
+     *         for this call.
+     */
+    public final String getTrunkSid() {
+        return this.trunkSid;
+    }
+
+    /**
+     * Returns The URI of this resource, relative to `https://api.twilio.com`.
      *
      * @return The URI of this resource, relative to `https://api.twilio.com`
      */
     public final String getUri() {
         return this.uri;
+    }
+
+    /**
+     * Returns The wait time in milliseconds before the call is placed..
+     *
+     * @return The wait time in milliseconds before the call is placed.
+     */
+    public final String getQueueTime() {
+        return this.queueTime;
     }
 
     @Override
@@ -721,7 +778,9 @@ public class Call extends Resource {
                Objects.equals(subresourceUris, other.subresourceUris) &&
                Objects.equals(to, other.to) &&
                Objects.equals(toFormatted, other.toFormatted) &&
-               Objects.equals(uri, other.uri);
+               Objects.equals(trunkSid, other.trunkSid) &&
+               Objects.equals(uri, other.uri) &&
+               Objects.equals(queueTime, other.queueTime);
     }
 
     @Override
@@ -750,7 +809,9 @@ public class Call extends Resource {
                             subresourceUris,
                             to,
                             toFormatted,
-                            uri);
+                            trunkSid,
+                            uri,
+                            queueTime);
     }
 
     @Override
@@ -780,7 +841,9 @@ public class Call extends Resource {
                           .add("subresourceUris", subresourceUris)
                           .add("to", to)
                           .add("toFormatted", toFormatted)
+                          .add("trunkSid", trunkSid)
                           .add("uri", uri)
+                          .add("queueTime", queueTime)
                           .toString();
     }
 }

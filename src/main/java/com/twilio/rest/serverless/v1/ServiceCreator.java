@@ -26,6 +26,7 @@ public class ServiceCreator extends Creator<Service> {
     private final String uniqueName;
     private final String friendlyName;
     private Boolean includeCredentials;
+    private Boolean uiEditable;
 
     /**
      * Construct a new ServiceCreator.
@@ -50,6 +51,19 @@ public class ServiceCreator extends Creator<Service> {
      */
     public ServiceCreator setIncludeCredentials(final Boolean includeCredentials) {
         this.includeCredentials = includeCredentials;
+        return this;
+    }
+
+    /**
+     * Whether the Service's properties and subresources can be edited via the UI.
+     * The default value is `false`..
+     *
+     * @param uiEditable Whether the Service's properties and subresources can be
+     *                   edited via the UI
+     * @return this
+     */
+    public ServiceCreator setUiEditable(final Boolean uiEditable) {
+        this.uiEditable = uiEditable;
         return this;
     }
 
@@ -108,6 +122,10 @@ public class ServiceCreator extends Creator<Service> {
 
         if (includeCredentials != null) {
             request.addPostParam("IncludeCredentials", includeCredentials.toString());
+        }
+
+        if (uiEditable != null) {
+            request.addPostParam("UiEditable", uiEditable.toString());
         }
     }
 }

@@ -32,13 +32,9 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * PLEASE NOTE that this class contains beta products that are subject to
- * change. Use them with caution.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Service extends Resource {
-    private static final long serialVersionUID = 102125426973308L;
+    private static final long serialVersionUID = 105925159469464L;
 
     /**
      * Create a ServiceCreator to execute create.
@@ -135,6 +131,7 @@ public class Service extends Resource {
     private final Boolean skipSmsToLandlines;
     private final Boolean dtmfInputRequired;
     private final String ttsName;
+    private final Boolean doNotShareWarningEnabled;
     private final DateTime dateCreated;
     private final DateTime dateUpdated;
     private final URI url;
@@ -159,6 +156,8 @@ public class Service extends Resource {
                     final Boolean dtmfInputRequired,
                     @JsonProperty("tts_name")
                     final String ttsName,
+                    @JsonProperty("do_not_share_warning_enabled")
+                    final Boolean doNotShareWarningEnabled,
                     @JsonProperty("date_created")
                     final String dateCreated,
                     @JsonProperty("date_updated")
@@ -176,6 +175,7 @@ public class Service extends Resource {
         this.skipSmsToLandlines = skipSmsToLandlines;
         this.dtmfInputRequired = dtmfInputRequired;
         this.ttsName = ttsName;
+        this.doNotShareWarningEnabled = doNotShareWarningEnabled;
         this.dateCreated = DateConverter.iso8601DateTimeFromString(dateCreated);
         this.dateUpdated = DateConverter.iso8601DateTimeFromString(dateUpdated);
         this.url = url;
@@ -183,7 +183,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The unique string that identifies the resource.
+     * Returns The unique string that identifies the resource.
      *
      * @return The unique string that identifies the resource
      */
@@ -192,7 +192,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The SID of the Account that created the resource.
+     * Returns The SID of the Account that created the resource.
      *
      * @return The SID of the Account that created the resource
      */
@@ -201,8 +201,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The string that you assigned to describe the verification
-     * service.
+     * Returns The string that you assigned to describe the verification service.
      *
      * @return The string that you assigned to describe the verification service
      */
@@ -211,7 +210,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The length of the verification code.
+     * Returns The length of the verification code.
      *
      * @return The length of the verification code
      */
@@ -220,7 +219,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The Whether to perform a lookup with each verification.
+     * Returns Whether to perform a lookup with each verification.
      *
      * @return Whether to perform a lookup with each verification
      */
@@ -229,7 +228,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The Whether to pass PSD2 transaction parameters when starting a
+     * Returns Whether to pass PSD2 transaction parameters when starting a
      * verification.
      *
      * @return Whether to pass PSD2 transaction parameters when starting a
@@ -240,7 +239,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The Whether to skip sending SMS verifications to landlines.
+     * Returns Whether to skip sending SMS verifications to landlines.
      *
      * @return Whether to skip sending SMS verifications to landlines
      */
@@ -249,7 +248,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The Whether to ask the user to press a number before delivering the
+     * Returns Whether to ask the user to press a number before delivering the
      * verify code in a phone call.
      *
      * @return Whether to ask the user to press a number before delivering the
@@ -260,7 +259,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The name of an alternative text-to-speech service to use in phone
+     * Returns The name of an alternative text-to-speech service to use in phone
      * calls.
      *
      * @return The name of an alternative text-to-speech service to use in phone
@@ -271,7 +270,16 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The RFC 2822 date and time in GMT when the resource was created.
+     * Returns Whether to add a security warning at the end of an SMS..
+     *
+     * @return Whether to add a security warning at the end of an SMS.
+     */
+    public final Boolean getDoNotShareWarningEnabled() {
+        return this.doNotShareWarningEnabled;
+    }
+
+    /**
+     * Returns The RFC 2822 date and time in GMT when the resource was created.
      *
      * @return The RFC 2822 date and time in GMT when the resource was created
      */
@@ -280,8 +288,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The RFC 2822 date and time in GMT when the resource was last
-     * updated.
+     * Returns The RFC 2822 date and time in GMT when the resource was last updated.
      *
      * @return The RFC 2822 date and time in GMT when the resource was last updated
      */
@@ -290,7 +297,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The absolute URL of the resource.
+     * Returns The absolute URL of the resource.
      *
      * @return The absolute URL of the resource
      */
@@ -299,7 +306,7 @@ public class Service extends Resource {
     }
 
     /**
-     * Returns The The URLs of related resources.
+     * Returns The URLs of related resources.
      *
      * @return The URLs of related resources
      */
@@ -328,6 +335,7 @@ public class Service extends Resource {
                Objects.equals(skipSmsToLandlines, other.skipSmsToLandlines) &&
                Objects.equals(dtmfInputRequired, other.dtmfInputRequired) &&
                Objects.equals(ttsName, other.ttsName) &&
+               Objects.equals(doNotShareWarningEnabled, other.doNotShareWarningEnabled) &&
                Objects.equals(dateCreated, other.dateCreated) &&
                Objects.equals(dateUpdated, other.dateUpdated) &&
                Objects.equals(url, other.url) &&
@@ -345,6 +353,7 @@ public class Service extends Resource {
                             skipSmsToLandlines,
                             dtmfInputRequired,
                             ttsName,
+                            doNotShareWarningEnabled,
                             dateCreated,
                             dateUpdated,
                             url,
@@ -363,6 +372,7 @@ public class Service extends Resource {
                           .add("skipSmsToLandlines", skipSmsToLandlines)
                           .add("dtmfInputRequired", dtmfInputRequired)
                           .add("ttsName", ttsName)
+                          .add("doNotShareWarningEnabled", doNotShareWarningEnabled)
                           .add("dateCreated", dateCreated)
                           .add("dateUpdated", dateUpdated)
                           .add("url", url)

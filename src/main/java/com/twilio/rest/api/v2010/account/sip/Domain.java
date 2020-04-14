@@ -34,7 +34,7 @@ import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Domain extends Resource {
-    private static final long serialVersionUID = 249455221641772L;
+    private static final long serialVersionUID = 218123151164964L;
 
     /**
      * Create a DomainReader to execute read.
@@ -201,6 +201,8 @@ public class Domain extends Resource {
     private final URI voiceUrl;
     private final Map<String, String> subresourceUris;
     private final Boolean sipRegistration;
+    private final Boolean emergencyCallingEnabled;
+    private final Boolean secure;
 
     @JsonCreator
     private Domain(@JsonProperty("account_sid")
@@ -236,7 +238,11 @@ public class Domain extends Resource {
                    @JsonProperty("subresource_uris")
                    final Map<String, String> subresourceUris,
                    @JsonProperty("sip_registration")
-                   final Boolean sipRegistration) {
+                   final Boolean sipRegistration,
+                   @JsonProperty("emergency_calling_enabled")
+                   final Boolean emergencyCallingEnabled,
+                   @JsonProperty("secure")
+                   final Boolean secure) {
         this.accountSid = accountSid;
         this.apiVersion = apiVersion;
         this.authType = authType;
@@ -254,10 +260,12 @@ public class Domain extends Resource {
         this.voiceUrl = voiceUrl;
         this.subresourceUris = subresourceUris;
         this.sipRegistration = sipRegistration;
+        this.emergencyCallingEnabled = emergencyCallingEnabled;
+        this.secure = secure;
     }
 
     /**
-     * Returns The The SID of the Account that created the resource.
+     * Returns The SID of the Account that created the resource.
      *
      * @return The SID of the Account that created the resource
      */
@@ -266,7 +274,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The API version used to process the call.
+     * Returns The API version used to process the call.
      *
      * @return The API version used to process the call
      */
@@ -275,7 +283,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The types of authentication mapped to the domain.
+     * Returns The types of authentication mapped to the domain.
      *
      * @return The types of authentication mapped to the domain
      */
@@ -284,7 +292,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The RFC 2822 date and time in GMT that the resource was created.
+     * Returns The RFC 2822 date and time in GMT that the resource was created.
      *
      * @return The RFC 2822 date and time in GMT that the resource was created
      */
@@ -293,8 +301,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The RFC 2822 date and time in GMT that the resource was last
-     * updated.
+     * Returns The RFC 2822 date and time in GMT that the resource was last updated.
      *
      * @return The RFC 2822 date and time in GMT that the resource was last updated
      */
@@ -303,7 +310,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The unique address on Twilio to route SIP traffic.
+     * Returns The unique address on Twilio to route SIP traffic.
      *
      * @return The unique address on Twilio to route SIP traffic
      */
@@ -312,7 +319,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The string that you assigned to describe the resource.
+     * Returns The string that you assigned to describe the resource.
      *
      * @return The string that you assigned to describe the resource
      */
@@ -321,7 +328,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The unique string that identifies the resource.
+     * Returns The unique string that identifies the resource.
      *
      * @return The unique string that identifies the resource
      */
@@ -330,7 +337,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The URI of the resource, relative to `https://api.twilio.com`.
+     * Returns The URI of the resource, relative to `https://api.twilio.com`.
      *
      * @return The URI of the resource, relative to `https://api.twilio.com`
      */
@@ -339,7 +346,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The HTTP method used with voice_fallback_url.
+     * Returns The HTTP method used with voice_fallback_url.
      *
      * @return The HTTP method used with voice_fallback_url
      */
@@ -348,7 +355,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The URL we call when an error occurs while executing TwiML.
+     * Returns The URL we call when an error occurs while executing TwiML.
      *
      * @return The URL we call when an error occurs while executing TwiML
      */
@@ -357,7 +364,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The HTTP method to use with voice_url.
+     * Returns The HTTP method to use with voice_url.
      *
      * @return The HTTP method to use with voice_url
      */
@@ -366,7 +373,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The HTTP method we use to call voice_status_callback_url.
+     * Returns The HTTP method we use to call voice_status_callback_url.
      *
      * @return The HTTP method we use to call voice_status_callback_url
      */
@@ -375,7 +382,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The URL that we call with status updates.
+     * Returns The URL that we call with status updates.
      *
      * @return The URL that we call with status updates
      */
@@ -384,7 +391,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The The URL we call when receiving a call.
+     * Returns The URL we call when receiving a call.
      *
      * @return The URL we call when receiving a call
      */
@@ -393,7 +400,7 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The A list mapping resources associated with the SIP Domain resource.
+     * Returns A list mapping resources associated with the SIP Domain resource.
      *
      * @return A list mapping resources associated with the SIP Domain resource
      */
@@ -402,12 +409,30 @@ public class Domain extends Resource {
     }
 
     /**
-     * Returns The Whether SIP registration is allowed.
+     * Returns Whether SIP registration is allowed.
      *
      * @return Whether SIP registration is allowed
      */
     public final Boolean getSipRegistration() {
         return this.sipRegistration;
+    }
+
+    /**
+     * Returns Whether emergency calling is enabled for the domain..
+     *
+     * @return Whether emergency calling is enabled for the domain.
+     */
+    public final Boolean getEmergencyCallingEnabled() {
+        return this.emergencyCallingEnabled;
+    }
+
+    /**
+     * Returns Whether secure SIP is enabled for the domain.
+     *
+     * @return Whether secure SIP is enabled for the domain
+     */
+    public final Boolean getSecure() {
+        return this.secure;
     }
 
     @Override
@@ -438,7 +463,9 @@ public class Domain extends Resource {
                Objects.equals(voiceStatusCallbackUrl, other.voiceStatusCallbackUrl) &&
                Objects.equals(voiceUrl, other.voiceUrl) &&
                Objects.equals(subresourceUris, other.subresourceUris) &&
-               Objects.equals(sipRegistration, other.sipRegistration);
+               Objects.equals(sipRegistration, other.sipRegistration) &&
+               Objects.equals(emergencyCallingEnabled, other.emergencyCallingEnabled) &&
+               Objects.equals(secure, other.secure);
     }
 
     @Override
@@ -459,7 +486,9 @@ public class Domain extends Resource {
                             voiceStatusCallbackUrl,
                             voiceUrl,
                             subresourceUris,
-                            sipRegistration);
+                            sipRegistration,
+                            emergencyCallingEnabled,
+                            secure);
     }
 
     @Override
@@ -482,6 +511,8 @@ public class Domain extends Resource {
                           .add("voiceUrl", voiceUrl)
                           .add("subresourceUris", subresourceUris)
                           .add("sipRegistration", sipRegistration)
+                          .add("emergencyCallingEnabled", emergencyCallingEnabled)
+                          .add("secure", secure)
                           .toString();
     }
 }

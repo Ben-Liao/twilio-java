@@ -37,6 +37,7 @@ public class FlexFlowCreator extends Creator<FlexFlow> {
     private Boolean integrationCreationOnMessage;
     private Boolean longLived;
     private Boolean janitorEnabled;
+    private Integer integrationRetryCount;
 
     /**
      * Construct a new FlexFlowCreator.
@@ -179,7 +180,9 @@ public class FlexFlowCreator extends Creator<FlexFlow> {
     /**
      * Whether to create a task when the first message arrives when
      * `integration_type` is `task`. If `false`, the task is created with the
-     * channel..
+     * channel. **Note** that does not apply when channel type is `web`. Setting the
+     * value to `true` for channel type `web` will result in misconfigured Flex Flow
+     * and no tasks will be created..
      *
      * @param integrationCreationOnMessage Whether to create a task when the first
      *                                     message arrives
@@ -202,13 +205,26 @@ public class FlexFlowCreator extends Creator<FlexFlow> {
     }
 
     /**
-     * Boolean flag for enabling or disabling the Janitor.
+     * Boolean flag for enabling or disabling the Janitor..
      *
      * @param janitorEnabled Boolean flag for enabling or disabling the Janitor
      * @return this
      */
     public FlexFlowCreator setJanitorEnabled(final Boolean janitorEnabled) {
         this.janitorEnabled = janitorEnabled;
+        return this;
+    }
+
+    /**
+     * The number of times to retry the webhook if the first attempt fails. Can be
+     * an integer between 0 and 3, inclusive, and the default is 0..
+     *
+     * @param integrationRetryCount The number of times to retry the webhook if the
+     *                              first attempt fails
+     * @return this
+     */
+    public FlexFlowCreator setIntegrationRetryCount(final Integer integrationRetryCount) {
+        this.integrationRetryCount = integrationRetryCount;
         return this;
     }
 
@@ -319,6 +335,10 @@ public class FlexFlowCreator extends Creator<FlexFlow> {
 
         if (janitorEnabled != null) {
             request.addPostParam("JanitorEnabled", janitorEnabled.toString());
+        }
+
+        if (integrationRetryCount != null) {
+            request.addPostParam("Integration.RetryCount", integrationRetryCount.toString());
         }
     }
 }

@@ -40,7 +40,7 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Challenge extends Resource {
-    private static final long serialVersionUID = 149233025221094L;
+    private static final long serialVersionUID = 218254684366686L;
 
     public enum ChallengeStatuses {
         PENDING("pending"),
@@ -98,7 +98,8 @@ public class Challenge extends Resource {
     public enum FactorTypes {
         APP_PUSH("app-push"),
         SMS("sms"),
-        TOTP("totp");
+        TOTP("totp"),
+        PUSH("push");
 
         private final String value;
 
@@ -118,35 +119,6 @@ public class Challenge extends Resource {
         @JsonCreator
         public static FactorTypes forValue(final String value) {
             return Promoter.enumFromString(value, FactorTypes.values());
-        }
-    }
-
-    public enum FactorStrengths {
-        UNKNOWN("unknown"),
-        VERY_LOW("very_low"),
-        LOW("low"),
-        MEDIUM("medium"),
-        HIGH("high"),
-        VERY_HIGH("very_high");
-
-        private final String value;
-
-        private FactorStrengths(final String value) {
-            this.value = value;
-        }
-
-        public String toString() {
-            return value;
-        }
-
-        /**
-         * Generate a FactorStrengths from a string.
-         * @param value string value
-         * @return generated FactorStrengths
-         */
-        @JsonCreator
-        public static FactorStrengths forValue(final String value) {
-            return Promoter.enumFromString(value, FactorStrengths.values());
         }
     }
 
@@ -194,6 +166,20 @@ public class Challenge extends Resource {
                                            final String pathFactorSid,
                                            final String pathSid) {
         return new ChallengeFetcher(pathServiceSid, pathIdentity, pathFactorSid, pathSid);
+    }
+
+    /**
+     * Create a ChallengeReader to execute read.
+     *
+     * @param pathServiceSid Service Sid.
+     * @param pathIdentity Unique identity of the Entity
+     * @param pathFactorSid Factor Sid.
+     * @return ChallengeReader capable of executing the read
+     */
+    public static ChallengeReader reader(final String pathServiceSid,
+                                         final String pathIdentity,
+                                         final String pathFactorSid) {
+        return new ChallengeReader(pathServiceSid, pathIdentity, pathFactorSid);
     }
 
     /**
@@ -265,7 +251,6 @@ public class Challenge extends Resource {
     private final String details;
     private final String hiddenDetails;
     private final Challenge.FactorTypes factorType;
-    private final Challenge.FactorStrengths factorStrength;
     private final URI url;
 
     @JsonCreator
@@ -299,8 +284,6 @@ public class Challenge extends Resource {
                       final String hiddenDetails,
                       @JsonProperty("factor_type")
                       final Challenge.FactorTypes factorType,
-                      @JsonProperty("factor_strength")
-                      final Challenge.FactorStrengths factorStrength,
                       @JsonProperty("url")
                       final URI url) {
         this.sid = sid;
@@ -318,12 +301,11 @@ public class Challenge extends Resource {
         this.details = details;
         this.hiddenDetails = hiddenDetails;
         this.factorType = factorType;
-        this.factorStrength = factorStrength;
         this.url = url;
     }
 
     /**
-     * Returns The A string that uniquely identifies this Challenge..
+     * Returns A string that uniquely identifies this Challenge..
      *
      * @return A string that uniquely identifies this Challenge.
      */
@@ -332,7 +314,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The Account Sid..
+     * Returns Account Sid..
      *
      * @return Account Sid.
      */
@@ -341,7 +323,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The Service Sid..
+     * Returns Service Sid..
      *
      * @return Service Sid.
      */
@@ -350,7 +332,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The Entity Sid..
+     * Returns Entity Sid..
      *
      * @return Entity Sid.
      */
@@ -359,7 +341,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The Unique identity of the Entity.
+     * Returns Unique identity of the Entity.
      *
      * @return Unique identity of the Entity
      */
@@ -368,7 +350,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The Factor Sid..
+     * Returns Factor Sid..
      *
      * @return Factor Sid.
      */
@@ -377,7 +359,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The date this Challenge was created.
+     * Returns The date this Challenge was created.
      *
      * @return The date this Challenge was created
      */
@@ -386,7 +368,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The date this Challenge was updated.
+     * Returns The date this Challenge was updated.
      *
      * @return The date this Challenge was updated
      */
@@ -395,7 +377,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The date this Challenge was responded.
+     * Returns The date this Challenge was responded.
      *
      * @return The date this Challenge was responded
      */
@@ -404,7 +386,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The date this Challenge is expired.
+     * Returns The date this Challenge is expired.
      *
      * @return The date this Challenge is expired
      */
@@ -413,7 +395,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The Status of this Challenge.
+     * Returns The Status of this Challenge.
      *
      * @return The Status of this Challenge
      */
@@ -422,7 +404,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The Reason of this Challenge `status`.
+     * Returns The Reason of this Challenge `status`.
      *
      * @return The Reason of this Challenge `status`
      */
@@ -431,7 +413,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The Public details provided to contextualize the Challenge.
+     * Returns Public details provided to contextualize the Challenge.
      *
      * @return Public details provided to contextualize the Challenge
      */
@@ -440,7 +422,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The Hidden details provided to contextualize the Challenge.
+     * Returns Hidden details provided to contextualize the Challenge.
      *
      * @return Hidden details provided to contextualize the Challenge
      */
@@ -449,7 +431,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The Factor Type of this Challenge.
+     * Returns The Factor Type of this Challenge.
      *
      * @return The Factor Type of this Challenge
      */
@@ -458,16 +440,7 @@ public class Challenge extends Resource {
     }
 
     /**
-     * Returns The The Factor Strength of this Challenge.
-     *
-     * @return The Factor Strength of this Challenge
-     */
-    public final Challenge.FactorStrengths getFactorStrength() {
-        return this.factorStrength;
-    }
-
-    /**
-     * Returns The The URL of this resource..
+     * Returns The URL of this resource..
      *
      * @return The URL of this resource.
      */
@@ -502,7 +475,6 @@ public class Challenge extends Resource {
                Objects.equals(details, other.details) &&
                Objects.equals(hiddenDetails, other.hiddenDetails) &&
                Objects.equals(factorType, other.factorType) &&
-               Objects.equals(factorStrength, other.factorStrength) &&
                Objects.equals(url, other.url);
     }
 
@@ -523,7 +495,6 @@ public class Challenge extends Resource {
                             details,
                             hiddenDetails,
                             factorType,
-                            factorStrength,
                             url);
     }
 
@@ -545,7 +516,6 @@ public class Challenge extends Resource {
                           .add("details", details)
                           .add("hiddenDetails", hiddenDetails)
                           .add("factorType", factorType)
-                          .add("factorStrength", factorStrength)
                           .add("url", url)
                           .toString();
     }
